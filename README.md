@@ -4,6 +4,7 @@ total for stream json object.it's stream collection toolkit.
 
 ##example
 
+
 ```coffeescript
 generator(100)
 .pipe(total(
@@ -58,7 +59,8 @@ generator(100)
 ```
 
 result:
-```javascript
+
+```javascrip
 { ageAvg: 32.303030303030305,
   count: 99,
   sum: { ageSum: 3198, valueSum: 500326 },
@@ -79,13 +81,14 @@ result:
      { name: '24<=age<45', bound: 45, freq: 33 },
      { name: '45<=age<60', bound: 60, freq: 18 },
      { name: 'age>=60', bound: 60, freq: 13 } ] }
-sum age: 3198
 
 ```
 
 ##extend total function
+
 extend total function,you can use **total.use** define function.the function name's first letter is **$**.
 example:
+
 ```javascript
 total.use('$custom', function(doc, count) {
   var ret;
