@@ -13,5 +13,16 @@
     "avg"
   ],
   "author": "bona shen",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bonashen/stream-total.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bonashen/stream-total/issues"
+  },
+  "homepage": "https://github.com/bonashen/stream-total#readme",
+  "dependencies": {
+    "through": "^2.3.7"
+  }
 }
