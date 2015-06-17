@@ -1,6 +1,6 @@
 {
   "name": "stream-total",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "total for stream json object",
   "main": "total.js",
   "scripts": {
