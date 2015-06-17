@@ -87,7 +87,7 @@ result:
 
 ## extend total function
 
-extend total function,you can use **total.use** define function.the function name's first letter is **$**.
+extend total function,you can use **total.use** define function.the function name's first char is **'$'**.
 example:
 
 ```javascript
@@ -101,7 +101,7 @@ total.use('$custom', function(doc, count) {
   }
 });
 ```
-### using example:
+**using '$custom' example:**
 
 ```javascript
 
@@ -113,7 +113,7 @@ generator(100)
 
 ```
 
-## using readArray example:
+## readArray example:
 
 ```javascript
 var onPost = onProgress = function(doc){
@@ -125,7 +125,7 @@ result = total({product:{$custom:'age'}}).readArray([{age:15,id:'ba'}],onPost,on
 console.log(result);
 ```
 
-## using readIterator example:
+## readIterator example:
 
 ```javascript
 
