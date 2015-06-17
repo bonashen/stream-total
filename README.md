@@ -1,9 +1,9 @@
-#stream-total
+# stream-total
 
 total for stream json objects or array,iterator.
 support AMD or node.
 
-##example
+## example
 
 
 ```coffeescript
@@ -85,7 +85,7 @@ result:
 
 ```
 
-##extend total function
+## extend total function
 
 extend total function,you can use **total.use** define function.the function name's first letter is **$**.
 example:
@@ -101,7 +101,7 @@ total.use('$custom', function(doc, count) {
   }
 });
 ```
-###using example:
+### using example:
 
 ```javascript
 
@@ -113,7 +113,7 @@ generator(100)
 
 ```
 
-##using readArray example:
+## using readArray example:
 
 ```javascript
 var onPost = onProgress = function(doc){
@@ -125,7 +125,7 @@ result = total({product:{$custom:'age'}}).readArray([{age:15,id:'ba'}],onPost,on
 console.log(result);
 ```
 
-##using readIterator example:
+## using readIterator example:
 
 ```javascript
 
