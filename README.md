@@ -1,6 +1,6 @@
 # stream-total
 
-total for stream json objects or array,iterator.
+total for stream json objects or array,iterator.it's collection toolkit part.
 support AMD or node.
 
 ## example
