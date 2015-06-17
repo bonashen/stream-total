@@ -1,6 +1,7 @@
 #stream-total
 
-total for stream json object.it's stream collection toolkit.
+total for stream json objects or array,iterator.
+support AMD or node.
 
 ##example
 
@@ -49,7 +50,7 @@ generator(100)
          24
           ->(console.log this; 45)
          60]
-  )
+  ).stream()
 ).on('data', (doc)->
 #console.log doc
 ).once 'end', (result) ->
@@ -105,9 +106,41 @@ total.use('$custom', function(doc, count) {
 ```javascript
 
 generator(100)
-.pipe(total({product:{$custom:'age'}}))
+.pipe(total({product:{$custom:'age'}}).stream())
 .once('end',function(result){
     console.log(result);
 });
 
+```
+
+##using readArray example:
+
+```javascript
+var onPost = onProgress = function(doc){
+    console.log(doc);
+};
+
+result = total({product:{$custom:'age'}}).readArray([{age:15,id:'ba'}],onPost,onProgress);
+
+console.log(result);
+```
+
+##using readIterator example:
+
+```javascript
+
+var onPost = onProgress = function(doc){
+    console.log(doc);
+};
+
+var data=[{age:15,id:'ba'}];
+
+iterator ={
+    hasNext:function(){return data.length>0;},
+    next:function(){return data.shift();}
+}
+
+result = total({product:{$custom:'age'}}).readIterator(iterator,onPost,onProgress);
+
+console.log(result);
 ```

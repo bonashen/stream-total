@@ -1,27 +1,59 @@
-through = require 'through'
+#using example list:
+  #total(template).stream()
+  #total(template).readArray([],onProgress,onPost)
+  #total(template).readIterator(iterator,onProgress,onPost)
 
-exports = module.exports = total = (template)->
-  operators = parse template
-  operators.count = 0
-  operators.cache = obj = {}
-  s = through (
-      (doc)->
-        operators.count++
-        exec operators, doc
-        setPathValue(obj, operators)
-        s.emit('data', obj)
-    )
-  , ()->
-    exec operators
-    setPathValue(obj, operators)
-    s.emit('end', obj)
-    return
-  return s
+__exports=(template)->
+  new total(template)
+
+
+class total
+  constructor:(@template)->
+
+  stream:()->
+    through = require 'through'
+    actuary = new Actuary @template,((doc)->s.emit('end',doc)),(doc)->s.emit('data',doc)
+    s = through ((doc)->actuary.write(doc)), ->actuary.end()
+    return s
+
+  readArray:(array,onPost,onProgress)->
+    actuary = new Actuary @template,onPost?=(->),onProgress?=(->)
+    for item in array
+      actuary.write(item)
+    actuary.end()
+    actuary.cache
+
+  readIterator:(iterator,onPost,onProgress)->
+    if iterator and iterator.hasNext?() and 'function'==typeof iterator.next
+      actuary = new Actuary @template,onPost?=(->),onProgress?=(->)
+      while iterator.hasNext()
+        actuary.write(iterator.next())
+      actuary.end()
+      actuary.cache
+
+__exports.Actuary =
+  class Actuary
+    constructor:(@template,@onPost,@onProgress)->
+      @operators = parse @template
+      @operators.count = 0
+      @cache ={}
+
+    write:(doc)->
+      @operators.count++
+      exec @operators, doc
+      setPathValue(@cache, @operators)
+      @onProgress(@cache)
+
+    end:->
+      exec @operators
+      setPathValue(@cache, @operators)
+      @onPost(@cache)
+
 
 exec = (operators, doc)->
   if(doc)
     (
-      op.cache = operators.cache
+#      op.cache = operators.cache
       op.count = operators.count
       op.value = op.exec doc, operators.count
     )for op in operators
@@ -30,7 +62,7 @@ exec = (operators, doc)->
   return
 
 
-exports.parse = parse = (template, path)->
+__exports.parse = parse = (template, path)->
   parent = template
   path = path || []
 
@@ -67,16 +99,16 @@ parseOp = (op)->
     ) for key of ops when key == op.op
   return
 
-exports.sum = sum = (array)->
+__exports.sum = sum = (array)->
   ret = 0
   (ret += (value || 0)) for value in array
   ret
 
-exports.avg = avg = (array)->
+__exports.avg = avg = (array)->
   count = array.length;
   if count == 0 then 0 else sum(array) / count
 
-exports.product = product = (array)->
+__exports.product = product = (array)->
   if array.length == 0
     return 0
   prd = 1;
@@ -84,16 +116,16 @@ exports.product = product = (array)->
   return prd
 
 ##export normal Math library
-exports.abs = abs = Math.abs
-exports.pow = pow = Math.pow
-exports.sqrt = sqrt = Math.sqrt
+__exports.abs = abs = Math.abs
+__exports.pow = pow = Math.pow
+__exports.sqrt = sqrt = Math.sqrt
 #取整操作类方法
-exports.floor = floor = Math.floor
-exports.ceil = ceil = Math.ceil
-exports.round = round = Math.round
+__exports.floor = floor = Math.floor
+__exports.ceil = ceil = Math.ceil
+__exports.round = round = Math.round
 
-exports.square = square = (x)-> x * x
-exports.max = max = ()->
+__exports.square = square = (x)-> x * x
+__exports.max = max = ()->
   arr = []
   (
     if param instanceof Array
@@ -103,7 +135,7 @@ exports.max = max = ()->
   )for param in arguments
   Math.max.apply(null, arr)
 
-exports.min = min = ()->
+__exports.min = min = ()->
   arr = []
   (
     if param instanceof Array
@@ -115,28 +147,28 @@ exports.min = min = ()->
 
 
 #计算向下取指定count总量占比率percent值后去余值mod
-exports.floorPercentValue = exports.floorPV = floorPV = (count, percent, mod)->
+__exports.floorPercentValue = __exports.floorPV = floorPV = (count, percent, mod)->
   d_count = floor count * percent
   d_count -= d_count % (mod || 2)
 
 #简单的数组中数据点排序
-exports.sort = sort = (array)->
+__exports.sort = sort = (array)->
   array.sort (a, b)->
     if a > b then 1 else if a < b then -1 else 0
 
 #在数组头部与尾部中去除percent比率的数据点,0<percent<1,在调用前需对数组进行排序
-exports.wipeLeadTail = wipeLeadTail = (array, percent)->
+__exports.wipeLeadTail = wipeLeadTail = (array, percent)->
   if 0 < percent < 1
     d_count = (floorPV array.length, percent) / 2
     array[d_count..(-1) * (d_count + 1)]
 
 #拾取数组头部与尾部percent比率的数据点,在调用前需对数组进行排序
-exports.pickLeadTail = pickLeadTail = (array, percent)->
+__exports.pickLeadTail = pickLeadTail = (array, percent)->
   if 0 < percent < 1
     d_count = (floorPV array.length, percent) / 2
     array[0..d_count - 1].concat array[(d_count) * -1..]
 
-exports.getValues = getValues = (doc, args, count)->
+__exports.getValues = getValues = (doc, args, count)->
   for key in args
     switch typeof key
       when 'function' then key(doc, count)
@@ -144,7 +176,7 @@ exports.getValues = getValues = (doc, args, count)->
       else
         key
 #获取对象doc指定属性路径path的值，若未指定doc,则返回get
-exports.select = getValue = (doc, path)->
+__exports.select = getValue = (doc, path)->
   if arguments.length == 1
     [path,doc] = [doc, path]
   path = path.split '.'
@@ -160,7 +192,7 @@ exports.select = getValue = (doc, path)->
     ret
   if doc then get(doc) else get
 
-exports.openPath = openPath = (obj, path)->
+__exports.openPath = openPath = (obj, path)->
   paths = if 'string' == typeof path then path.split '.' else path
   ret = obj
   while  path = paths.shift()
@@ -179,7 +211,7 @@ setPathValue = (obj, operators)->
   return
 
 ops = {ends: {}};
-exports.use = use = (method, totalfn, atEnd)->
+__exports.use = use = (method, totalfn, atEnd)->
   ops[method] = if 'function' == typeof totalfn then totalfn else ()->;
   if atEnd
     ops.ends[method] = ops[method] isnt null
@@ -334,3 +366,13 @@ use '$frequency', ((doc, count)->
     @prevalue
   @exec doc, count
 )
+
+##exports
+if exports? and module? and module.exports?
+  exports = module.exports = __exports
+#
+
+##for AMD
+if 'function' == typeof define and define.amd?
+  define null, [], ->
+    __exports

@@ -94,7 +94,7 @@ generator(100).pipe(total({
       }, 60
     ]
   }
-})).on('data', function(doc) {}).once('end', function(result) {
+}).stream()).on('data', function(doc) {}).once('end', function(result) {
   console.log(result);
   console.log('sum age:', total.select(result, 'sum.ageSum'));
   return console.log(total.select(result, 'frequency')[0].values);

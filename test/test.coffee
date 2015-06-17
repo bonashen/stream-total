@@ -74,7 +74,7 @@ generator(100)
          24
           ->(console.log this; 45)
          60]
-  )
+  ).stream()
 ).on('data', (doc)->
 #console.log doc
 ).once 'end', (result) ->
