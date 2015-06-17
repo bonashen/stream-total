@@ -12,20 +12,31 @@ class total
 
   stream:()->
     through = require 'through'
-    actuary = new Actuary @template,((doc)->s.emit('end',doc)),(doc)->s.emit('data',doc)
+    actuary = new Actuary
+      template:@template
+      onPost:(doc)->s.emit 'end',doc
+      onProgress:(doc)->s.emit 'data',doc
+
     s = through ((doc)->actuary.write(doc)), ->actuary.end()
     return s
 
   readArray:(array,onPost,onProgress)->
-    actuary = new Actuary @template,onPost?=(->),onProgress?=(->)
+    actuary = new Actuary
+      template:@template
+      onPost:onPost
+      onProgress:onProgress
+
     for item in array
       actuary.write(item)
     actuary.end()
     actuary.cache
 
   readIterator:(iterator,onPost,onProgress)->
-    if iterator and iterator.hasNext?() and 'function'==typeof iterator.next
-      actuary = new Actuary @template,onPost?=(->),onProgress?=(->)
+    if iterator? and iterator.hasNext?() and 'function'==typeof iterator.next
+      actuary = new Actuary
+        template:@template
+        onPost:onPost
+        onProgress:onProgress
       while iterator.hasNext()
         actuary.write(iterator.next())
       actuary.end()
@@ -33,8 +44,11 @@ class total
 
 __exports.Actuary =
   class Actuary
-    constructor:(@template,@onPost,@onProgress)->
+    constructor:(option)->
+      {@template,@onPost,@onProgress}=option
       @operators = parse @template
+      if @operators.length ==0
+        throw new Error "You must set template!"
       @operators.count = 0
       @cache ={}
 

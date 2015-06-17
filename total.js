@@ -13,10 +13,14 @@ total = (function() {
   total.prototype.stream = function() {
     var actuary, s, through;
     through = require('through');
-    actuary = new Actuary(this.template, (function(doc) {
-      return s.emit('end', doc);
-    }), function(doc) {
-      return s.emit('data', doc);
+    actuary = new Actuary({
+      template: this.template,
+      onPost: function(doc) {
+        return s.emit('end', doc);
+      },
+      onProgress: function(doc) {
+        return s.emit('data', doc);
+      }
     });
     s = through((function(doc) {
       return actuary.write(doc);
@@ -28,7 +32,11 @@ total = (function() {
 
   total.prototype.readArray = function(array, onPost, onProgress) {
     var actuary, i, item, len;
-    actuary = new Actuary(this.template, onPost != null ? onPost : onPost = (function() {}), onProgress != null ? onProgress : onProgress = (function() {}));
+    actuary = new Actuary({
+      template: this.template,
+      onPost: onPost,
+      onProgress: onProgress
+    });
     for (i = 0, len = array.length; i < len; i++) {
       item = array[i];
       actuary.write(item);
@@ -39,8 +47,12 @@ total = (function() {
 
   total.prototype.readIterator = function(iterator, onPost, onProgress) {
     var actuary;
-    if (iterator && (typeof iterator.hasNext === "function" ? iterator.hasNext() : void 0) && 'function' === typeof iterator.next) {
-      actuary = new Actuary(this.template, onPost != null ? onPost : onPost = (function() {}), onProgress != null ? onProgress : onProgress = (function() {}));
+    if ((iterator != null) && (typeof iterator.hasNext === "function" ? iterator.hasNext() : void 0) && 'function' === typeof iterator.next) {
+      actuary = new Actuary({
+        template: this.template,
+        onPost: onPost,
+        onProgress: onProgress
+      });
       while (iterator.hasNext()) {
         actuary.write(iterator.next());
       }
@@ -54,11 +66,12 @@ total = (function() {
 })();
 
 __exports.Actuary = Actuary = (function() {
-  function Actuary(template1, onPost1, onProgress1) {
-    this.template = template1;
-    this.onPost = onPost1;
-    this.onProgress = onProgress1;
+  function Actuary(option) {
+    this.template = option.template, this.onPost = option.onPost, this.onProgress = option.onProgress;
     this.operators = parse(this.template);
+    if (this.operators.length === 0) {
+      throw new Error("You must set template!");
+    }
     this.operators.count = 0;
     this.cache = {};
   }
