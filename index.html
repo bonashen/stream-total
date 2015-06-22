@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Stream-total by bonashen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Stream-total</h1>
+      <h2 class="project-tagline">total for stream json objects or array</h2>
+      <a href="https://github.com/bonashen/stream-total" class="btn">View on GitHub</a>
+      <a href="https://github.com/bonashen/stream-total/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/bonashen/stream-total/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="stream-total" class="anchor" href="#stream-total" aria-hidden="true"><span class="octicon octicon-link"></span></a>stream-total</h1>
+
+<p>total for stream json objects or array,iterator.it's collection toolkit part.
+support AMD or node.</p>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>example</h2>
+
+<div class="highlight highlight-coffeescript"><pre>generator(<span class="pl-c1">100</span>)
+.pipe(total(
+    <span class="pl-v"><span class="pl-v">ageAvg:</span></span>
+      <span class="pl-v"><span class="pl-v">$avg:</span></span> [
+        <span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+      ]
+    <span class="pl-v"><span class="pl-v">count:</span></span>
+      <span class="pl-v"><span class="pl-v">$count:</span></span> <span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">sum:</span></span>
+      <span class="pl-v"><span class="pl-v">ageSum:</span></span>
+        <span class="pl-v"><span class="pl-v">$sum:</span></span> <span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+      <span class="pl-v"><span class="pl-v">valueSum:</span></span>
+        <span class="pl-v"><span class="pl-v">$sum:</span></span><span class="pl-s"><span class="pl-pds">'</span>value<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">ageMax:</span></span>
+      <span class="pl-v"><span class="pl-v">$max:</span></span> [
+        <span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+<span class="pl-c">#        (doc) -&gt;</span>
+<span class="pl-c">#          doc['value' ]</span>
+      ]
+    <span class="pl-v"><span class="pl-v">minAge:</span></span>
+      <span class="pl-v"><span class="pl-v">$min:</span></span> [<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>]
+    <span class="pl-v"><span class="pl-v">modeGrade:</span></span>
+      <span class="pl-v"><span class="pl-v">$mode:</span></span><span class="pl-s"><span class="pl-pds">'</span>grade.name<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">modeAge:</span></span>
+      <span class="pl-v"><span class="pl-v">$mode :</span></span> <span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">avedev:</span></span>
+      <span class="pl-v"><span class="pl-v">$avedev:</span></span><span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">stdev_s:</span></span>
+      <span class="pl-v"><span class="pl-v">$stdev_s:</span></span>[<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>]
+    <span class="pl-v"><span class="pl-v">stdev_p:</span></span>
+      <span class="pl-v"><span class="pl-v">$stdev_p:</span></span><span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">custom:</span></span>
+      <span class="pl-v"><span class="pl-v">$custom:</span></span><span class="pl-s"><span class="pl-pds">'</span>n_value<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">product:</span></span>
+      <span class="pl-v"><span class="pl-v">$product:</span></span><span class="pl-s"><span class="pl-pds">'</span>n_value<span class="pl-pds">'</span></span>
+    <span class="pl-v"><span class="pl-v">trimmean:</span></span>
+      <span class="pl-v"><span class="pl-v">$trimmean:</span></span>[<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>,<span class="pl-c1">0.4</span>]
+    <span class="pl-v"><span class="pl-v">frequency:</span></span>
+      <span class="pl-v"><span class="pl-v">$frequency:</span></span>
+        [<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>, <span class="pl-c1">18</span>, <span class="pl-c1">10</span>
+         <span class="pl-c1">24</span>
+          <span class="pl-k">-&gt;</span>(<span class="pl-en">console</span>.<span class="pl-c1">log</span> <span class="pl-v">this</span>; <span class="pl-c1">45</span>)
+         <span class="pl-c1">60</span>]
+  ).stream()
+).on(<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>, <span class="pl-smi">(doc)</span><span class="pl-k">-&gt;</span>
+<span class="pl-c">#console.log doc</span>
+).once <span class="pl-s"><span class="pl-pds">'</span>end<span class="pl-pds">'</span></span>, <span class="pl-smi">(result)</span> <span class="pl-k">-&gt;</span>
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span> result
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span> <span class="pl-s"><span class="pl-pds">'</span>sum age:<span class="pl-pds">'</span></span>,total.select(result,<span class="pl-s"><span class="pl-pds">'</span>sum.ageSum<span class="pl-pds">'</span></span>)
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span> total.select(result,<span class="pl-s"><span class="pl-pds">'</span>frequency<span class="pl-pds">'</span></span>)[<span class="pl-c1">0</span>].values</pre></div>
+
+<p>result:</p>
+
+<pre lang="javascrip"><code>{ ageAvg: 32.303030303030305,
+  count: 99,
+  sum: { ageSum: 3198, valueSum: 500326 },
+  ageMax: 69,
+  minAge: 1,
+  modeGrade: 'grade 2',
+  modeAge: '31',
+  avedev: 16.524640342822156,
+  stdev_s: 19.70934438355788,
+  stdev_p: 19.609549593545182,
+  custom: 9.33262154439441e+155,
+  product: 9.33262154439441e+155,
+  trimmean: 31.62295081967213,
+  frequency: 
+   [ { name: 'age&lt;10', bound: 10, freq: 15 },
+     { name: '10&lt;=age&lt;18', bound: 18, freq: 12 },
+     { name: '18&lt;=age&lt;24', bound: 24, freq: 8 },
+     { name: '24&lt;=age&lt;45', bound: 45, freq: 33 },
+     { name: '45&lt;=age&lt;60', bound: 60, freq: 18 },
+     { name: 'age&gt;=60', bound: 60, freq: 13 } ] }
+
+</code></pre>
+
+<h2>
+<a id="extend-total-function" class="anchor" href="#extend-total-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>extend total function</h2>
+
+<p>extend total function,you can use <strong>total.use</strong> define function.the function name's first char is <strong>'$'</strong>.
+example:</p>
+
+<div class="highlight highlight-javascript"><pre>total.use(<span class="pl-s"><span class="pl-pds">'</span>$custom<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">doc</span>, <span class="pl-smi">count</span>) {
+  <span class="pl-k">var</span> ret;
+  ret <span class="pl-k">=</span> total.sum(total.getValues(doc, <span class="pl-v">this</span>.args, count));
+  <span class="pl-k">if</span> (count <span class="pl-k">===</span> <span class="pl-c1">1</span>) {
+    <span class="pl-k">return</span> <span class="pl-v">this</span>.prevalue <span class="pl-k">=</span> ret;
+  } <span class="pl-k">else</span> {
+    <span class="pl-k">return</span> <span class="pl-v">this</span>.prevalue <span class="pl-k">*=</span> ret;
+  }
+});</pre></div>
+
+<p><strong>using '$custom' example:</strong></p>
+
+<div class="highlight highlight-javascript"><pre>
+generator(<span class="pl-c1">100</span>)
+.pipe(total({product<span class="pl-k">:</span>{$custom<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>}}).stream())
+.once(<span class="pl-s"><span class="pl-pds">'</span>end<span class="pl-pds">'</span></span>,<span class="pl-k">function</span>(<span class="pl-smi">result</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(result);
+});
+</pre></div>
+
+<h2>
+<a id="readarray-example" class="anchor" href="#readarray-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>readArray example:</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> onPost <span class="pl-k">=</span> <span class="pl-en">onProgress</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">doc</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(doc);
+};
+
+result <span class="pl-k">=</span> total({product<span class="pl-k">:</span>{$custom<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>}}).readArray([{age<span class="pl-k">:</span><span class="pl-c1">15</span>,id<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>ba<span class="pl-pds">'</span></span>}],onPost,onProgress);
+
+<span class="pl-en">console</span><span class="pl-c1">.log</span>(result);</pre></div>
+
+<h2>
+<a id="readiterator-example" class="anchor" href="#readiterator-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>readIterator example:</h2>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-k">var</span> onPost <span class="pl-k">=</span> <span class="pl-en">onProgress</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">doc</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(doc);
+};
+
+<span class="pl-k">var</span> data<span class="pl-k">=</span>[{age<span class="pl-k">:</span><span class="pl-c1">15</span>,id<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>ba<span class="pl-pds">'</span></span>}];
+
+iterator <span class="pl-k">=</span>{
+    <span class="pl-en">hasNext</span><span class="pl-k">:</span><span class="pl-k">function</span>(){<span class="pl-k">return</span> data.<span class="pl-c1">length</span><span class="pl-k">&gt;</span><span class="pl-c1">0</span>;},
+    <span class="pl-en">next</span><span class="pl-k">:</span><span class="pl-k">function</span>(){<span class="pl-k">return</span> data.<span class="pl-c1">shift</span>();}
+}
+
+result <span class="pl-k">=</span> total({product<span class="pl-k">:</span>{$custom<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>}}).readIterator(iterator,onPost,onProgress);
+
+<span class="pl-en">console</span><span class="pl-c1">.log</span>(result);</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/bonashen/stream-total">Stream-total</a> is maintained by <a href="https://github.com/bonashen">bonashen</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
